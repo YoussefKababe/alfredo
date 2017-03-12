@@ -1,0 +1,6 @@
+package: dropbot
+import:
+- package: github.com/joho/godotenv
+  version: ~1.1.0
+- package: github.com/labstack/echo
+  version: ~3.0.3

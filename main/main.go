@@ -1,26 +1,18 @@
 package main
 
 import (
-  "os"
   "fmt"
   "log"
   "bytes"
   "net/http"
   "encoding/json"
   "github.com/labstack/echo"
-  "github.com/joho/godotenv"
+  "dropbot/config"
 )
-
-var verifyToken string
-var pageToken string
 
 func main() {
   e := echo.New()
-  if err := godotenv.Load(); err != nil {
-    log.Fatal(err)
-  }
-  verifyToken = os.Getenv("VERIFY_TOKEN")
-  pageToken = os.Getenv("PAGE_TOKEN")
+  config.LoadEnvVars()
   e.GET("/webhook", verify)
   e.POST("/webhook", receive)
   e.Logger.Fatal(e.Start(":8080"))
@@ -28,7 +20,7 @@ func main() {
 
 func verify(c echo.Context) error {
   mode, token := c.QueryParam("hub.mode"), c.QueryParam("hub.verify_token")
-  if mode == "subscribe" && token == verifyToken {
+  if mode == "subscribe" && token == config.VerifyToken {
     fmt.Println("Validating webhook...")
     return c.String(http.StatusOK, c.QueryParam("hub.challenge"))
   } else {
@@ -95,7 +87,7 @@ func receivedMessage(event *Event) {
 
   mm, _ := json.Marshal(newMessage)
 
-  request, _ := http.NewRequest("POST", "https://graph.facebook.com/v2.6/me/messages?access_token=" + pageToken, bytes.NewBuffer(mm))
+  request, _ := http.NewRequest("POST", "https://graph.facebook.com/v2.6/me/messages?access_token=" + config.PageToken, bytes.NewBuffer(mm))
   request.Header.Set("Content-Type", "application/json")
 
   client := http.Client{}

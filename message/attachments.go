@@ -1,6 +1,6 @@
 package message
 
-func HandleAttachments(event *Event) {
+func handleAttachments(event *Event) {
   senderId := event.Sender.Id
   message := event.Message
 
@@ -14,6 +14,6 @@ func HandleAttachments(event *Event) {
       },
     }
 
-    go SendMessage(&newMessage)
+    go sendMessage(&newMessage)
   }
 }

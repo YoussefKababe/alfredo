@@ -5,7 +5,6 @@ import (
   "net/http"
   "dropbot/config"
   "bytes"
-  "fmt"
 )
 
 func HandleMessage(event *Event) {
@@ -13,19 +12,17 @@ func HandleMessage(event *Event) {
 
   switch {
   case message.Text != "":
-    HandleText(event)
+    handleText(event)
   case message.Attachments != nil:
-    HandleAttachments(event)
+    handleAttachments(event)
   }
 }
 
-func SendMessage(event *map[string]interface{}) {
+func sendMessage(event *map[string]interface{}) {
   message, _ := json.Marshal(event)
   request, _ := http.NewRequest("POST", "https://graph.facebook.com/v2.6/me/messages?access_token=" + config.PageToken, bytes.NewBuffer(message))
   request.Header.Set("Content-Type", "application/json")
 
   client := http.Client{}
-  resp, _ := client.Do(request)
-
-  fmt.Println(resp)
+  client.Do(request)
 }

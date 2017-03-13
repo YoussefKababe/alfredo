@@ -1,6 +1,6 @@
 package message
 
-func HandleText(event *Event) {
+func handleText(event *Event) {
   senderId := event.Sender.Id
   message := event.Message
 
@@ -13,5 +13,5 @@ func HandleText(event *Event) {
     },
   }
 
-  go SendMessage(&newMessage)
+  go sendMessage(&newMessage)
 }

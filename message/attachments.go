@@ -1,7 +1,7 @@
 package message
 
 func handleAttachments(event *Event) {
-	senderId := event.Sender.Id
+	senderID := event.Sender.ID
 	message := event.Message
 
 	for _, attachment := range message.Attachments {
@@ -10,7 +10,7 @@ func handleAttachments(event *Event) {
 				"attachment": attachment,
 			},
 			"recipient": map[string]interface{}{
-				"id": senderId,
+				"id": senderID,
 			},
 		}
 

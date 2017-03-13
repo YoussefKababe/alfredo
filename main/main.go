@@ -4,9 +4,10 @@ import (
 	"dropbot/config"
 	"dropbot/message"
 	"fmt"
-	"github.com/labstack/echo"
 	"log"
 	"net/http"
+
+	"github.com/labstack/echo"
 )
 
 func main() {
@@ -22,10 +23,10 @@ func verify(c echo.Context) error {
 	if mode == "subscribe" && token == config.VerifyToken {
 		fmt.Println("Validating webhook...")
 		return c.String(http.StatusOK, c.QueryParam("hub.challenge"))
-	} else {
-		log.Panic("Failed validation. Make sure the validation tokens match.")
-		return c.NoContent(http.StatusForbidden)
 	}
+
+	log.Panic("Failed validation. Make sure the validation tokens match.")
+	return c.NoContent(http.StatusForbidden)
 }
 
 func receive(c echo.Context) error {

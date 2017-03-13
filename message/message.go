@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// HandleMessage decides what to do with a new event depending on the message type.
 func HandleMessage(event *Event) {
 	message := event.Message
 

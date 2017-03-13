@@ -1,13 +1,19 @@
 package config
 
 import (
-	"github.com/joho/godotenv"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
-var VerifyToken, PageToken string
+// VerifyToken is needed to verify connection between the messenger platform and the app.
+var VerifyToken string
 
+// PageToken is needed to communicate with the messenger platform.
+var PageToken string
+
+// LoadEnvVars loads config environment variables
 func LoadEnvVars() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)

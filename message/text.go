@@ -1,7 +1,7 @@
 package message
 
 func handleText(event *Event) {
-	senderId := event.Sender.Id
+	senderID := event.Sender.ID
 	message := event.Message
 
 	newMessage := map[string]interface{}{
@@ -9,7 +9,7 @@ func handleText(event *Event) {
 			"text": message.Text,
 		},
 		"recipient": map[string]interface{}{
-			"id": senderId,
+			"id": senderID,
 		},
 	}
 

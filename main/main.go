@@ -35,7 +35,7 @@ func receive(c echo.Context) error {
   for _, entry := range call.Entries {
     for _, event := range entry.Events {
       if event.Message != nil {
-        message.ReceivedMessage(event)
+        message.HandleMessage(event)
       } else {
         fmt.Println("Webhook received unknown event:", event)
       }

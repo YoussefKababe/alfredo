@@ -20,6 +20,12 @@ type Event struct {
 
 type Message struct {
   Text string `json:"text"`
+  Attachments []*Attachment `json:"attachments"`
+}
+
+type Attachment struct {
+  Type string `json:"type"`
+  Payload map[string]string `json:"payload"`
 }
 
 type Person struct {

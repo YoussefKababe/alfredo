@@ -1,19 +1,15 @@
 package message
 
+import "dropbot/dropbox"
+
 func handleAttachments(event *Event) {
-	senderID := event.Sender.ID
 	message := event.Message
+	senderID := event.Sender.ID
 
 	for _, attachment := range message.Attachments {
-		newMessage := map[string]interface{}{
-			"message": map[string]interface{}{
-				"attachment": attachment,
-			},
-			"recipient": map[string]interface{}{
-				"id": senderID,
-			},
-		}
-
-		go sendMessage(&newMessage)
+		url := attachment.Payload["url"]
+		go dropbox.UploadAttachment(&url)
 	}
+
+	sendText("Your file is on its way to your Dropbox account!", senderID)
 }

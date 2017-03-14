@@ -13,6 +13,9 @@ var VerifyToken string
 // PageToken is needed to communicate with the messenger platform.
 var PageToken string
 
+// DropboxToken is needed to communicate with Dropbox.
+var DropboxToken string
+
 // LoadEnvVars loads config environment variables
 func LoadEnvVars() {
 	if err := godotenv.Load(); err != nil {
@@ -20,4 +23,5 @@ func LoadEnvVars() {
 	}
 	VerifyToken = os.Getenv("VERIFY_TOKEN")
 	PageToken = os.Getenv("PAGE_TOKEN")
+	DropboxToken = os.Getenv("DROPBOX_TOKEN")
 }

@@ -6,13 +6,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"path"
+	"strings"
 )
 
 // UploadAttachment uploads an attachment to dropbox
-func UploadAttachment(url *string) {
+func UploadAttachment(url string) {
 	attachment := map[string]interface{}{
 		"url":  url,
-		"path": "/Apps/Alfredo/test.png",
+		"path": "/" + path.Base(url)[0:strings.Index(path.Base(url), "?")],
 	}
 
 	data, _ := json.Marshal(attachment)

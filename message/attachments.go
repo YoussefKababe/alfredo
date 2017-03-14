@@ -7,8 +7,7 @@ func handleAttachments(event *Event) {
 	senderID := event.Sender.ID
 
 	for _, attachment := range message.Attachments {
-		url := attachment.Payload["url"]
-		go dropbox.UploadAttachment(&url)
+		go dropbox.UploadAttachment(attachment.Payload["url"])
 	}
 
 	sendText("Your file is on its way to your Dropbox account!", senderID)

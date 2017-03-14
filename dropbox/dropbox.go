@@ -2,7 +2,7 @@ package dropbox
 
 import (
 	"bytes"
-	"dropbot/config"
+	"alfredo/config"
 	"encoding/json"
 	"fmt"
 	"net/http"

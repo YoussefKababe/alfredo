@@ -1,8 +1,8 @@
 package main
 
 import (
-	"dropbot/config"
-	"dropbot/message"
+	"alfredo/config"
+	"alfredo/message"
 	"fmt"
 	"log"
 	"net/http"
@@ -13,6 +13,7 @@ import (
 func main() {
 	e := echo.New()
 	config.LoadEnvVars()
+	message.SetGetStartedButton()
 	e.GET("/webhook", verify)
 	e.POST("/webhook", receive)
 	e.Logger.Fatal(e.Start(":8080"))

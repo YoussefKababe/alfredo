@@ -1,6 +1,6 @@
 package message
 
-import "dropbot/dropbox"
+import "alfredo/dropbox"
 
 func handleAttachments(event *Event) {
 	message := event.Message
@@ -10,5 +10,5 @@ func handleAttachments(event *Event) {
 		go dropbox.UploadAttachment(attachment.Payload["url"])
 	}
 
-	sendText("Your file is on its way to your Dropbox account!", senderID)
+	sendText("Your files are on their way to your Dropbox account!", senderID)
 }

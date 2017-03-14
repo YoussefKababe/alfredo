@@ -1,9 +1,10 @@
 package message
 
 import (
+	"alfredo/config"
 	"bytes"
-	"dropbot/config"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -26,4 +27,20 @@ func sendMessage(event *map[string]interface{}) {
 
 	client := http.Client{}
 	client.Do(request)
+}
+
+// SetGetStartedButton sets the get started button in messenger
+func SetGetStartedButton() {
+	data, _ := json.Marshal(map[string]interface{}{
+		"get_started": map[string]string{
+			"payload": "GET_STARTED_PAYLOAD",
+		},
+	})
+
+	request, _ := http.NewRequest("POST", "https://graph.facebook.com/v2.6/me/messenger_profile?access_token="+config.PageToken, bytes.NewBuffer(data))
+	request.Header.Set("Content-Type", "application/json")
+	client := http.Client{}
+	resp, _ := client.Do(request)
+
+	fmt.Println(resp)
 }

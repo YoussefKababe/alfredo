@@ -2,7 +2,7 @@ package main
 
 import (
 	"alfredo/config"
-	"alfredo/message"
+	"alfredo/messenger"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,11 +15,11 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 	config.LoadEnvVars()
-	go message.SetGetStartedButton()
-	go message.SetGreetingText()
+	go messenger.SetGetStartedButton()
+	go messenger.SetGreetingText()
 	e.GET("/webhook", verify)
 	e.POST("/webhook", receive)
-	e.GET("/mdropbox", message.LinkDropbox)
+	e.GET("/mdropbox", messenger.LinkDropbox)
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
@@ -35,15 +35,15 @@ func verify(c echo.Context) error {
 }
 
 func receive(c echo.Context) error {
-	call := new(message.Call)
+	call := new(messenger.Call)
 	c.Bind(call)
 
 	for _, entry := range call.Entries {
 		for _, event := range entry.Events {
 			if event.Message != nil {
-				message.HandleMessage(event)
+				messenger.HandleMessage(event)
 			} else if event.Postback != nil {
-				message.HandlePostback(event)
+				messenger.HandlePostback(event)
 			} else {
 				fmt.Println("Webhook received unknown event:", event)
 			}

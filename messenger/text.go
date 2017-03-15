@@ -1,4 +1,4 @@
-package message
+package messenger
 
 func handleText(event *Event) {
 	senderID := event.Sender.ID

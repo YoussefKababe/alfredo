@@ -1,4 +1,4 @@
-package message
+package messenger
 
 import (
 	"alfredo/dropbox"
@@ -14,7 +14,7 @@ func handleAttachments(event *Event) {
 		go dropbox.UploadAttachment(attachment.Payload["url"], user["dropboxToken"].(string))
 	}
 
-	sendText("Your files are on their way to your Dropbox account!", senderID)
+	sendText("Your file is on the way to your Dropbox account!", senderID)
 }
 
 func sendDropoxAuthLink(recipientID string) {
@@ -24,8 +24,8 @@ func sendDropoxAuthLink(recipientID string) {
 				"type": "template",
 				"payload": map[string]interface{}{
 					"template_type": "button",
-					"text": "Before I can help you do that, you have to link me to" +
-						" your Dropbox account first!",
+					"text": "Before I can help you do that, let's link your" +
+						" Dropbox account first!",
 					"buttons": []map[string]string{
 						map[string]string{
 							"type": "web_url",

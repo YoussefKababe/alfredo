@@ -1,4 +1,4 @@
-package message
+package messenger
 
 // Call represents a call from the messenger platform.
 type Call struct {

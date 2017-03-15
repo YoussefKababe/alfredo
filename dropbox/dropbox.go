@@ -37,7 +37,7 @@ func GetAuthToken(code string) string {
 	data.Add("grant_type", "authorization_code")
 	data.Add("client_id", config.DropboxKey)
 	data.Add("client_secret", config.DropboxSecret)
-	data.Add("redirect_uri", "https://dropbot.localtunnel.me/mdropbox")
+	data.Add("redirect_uri", "https://alfredo.qubate.tech/mdropbox")
 
 	request, _ := http.NewRequest("POST", "https://api.dropboxapi.com/oauth2/token", bytes.NewBufferString(data.Encode()))
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")

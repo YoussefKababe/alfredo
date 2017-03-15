@@ -31,7 +31,7 @@ func sendDropoxAuthLink(recipientID string) {
 							"type": "web_url",
 							"url": "https://www.dropbox.com/oauth2/authorize" +
 								"?client_id=b2ooejf291z2tex&response_type=code" +
-								"&redirect_uri=https://dropbot.localtunnel.me/mdropbox" +
+								"&redirect_uri=https://alfredo.qubate.tech/mdropbox" +
 								"&state=" + recipientID,
 							"title": "Link my Dropbox",
 						},

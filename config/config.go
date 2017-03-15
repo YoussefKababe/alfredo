@@ -13,11 +13,14 @@ var VerifyToken string
 // PageToken is needed to communicate with the messenger platform.
 var PageToken string
 
-// DropboxToken is needed to communicate with Dropbox.
-var DropboxToken string
-
 // FirebaseToken is needed to communicate with Firebase.
 var FirebaseToken string
+
+// DropboxKey is needed to communicate with Dropbox.
+var DropboxKey string
+
+// DropboxSecret is needed to communicate with Dropbox.
+var DropboxSecret string
 
 // LoadEnvVars loads config environment variables
 func LoadEnvVars() {
@@ -26,6 +29,7 @@ func LoadEnvVars() {
 	}
 	VerifyToken = os.Getenv("VERIFY_TOKEN")
 	PageToken = os.Getenv("PAGE_TOKEN")
-	DropboxToken = os.Getenv("DROPBOX_TOKEN")
 	FirebaseToken = os.Getenv("FIREBASE_TOKEN")
+	DropboxKey = os.Getenv("DROPBOX_KEY")
+	DropboxSecret = os.Getenv("DROPBOX_SECRET")
 }

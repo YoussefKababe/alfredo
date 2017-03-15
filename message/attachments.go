@@ -1,13 +1,17 @@
 package message
 
-import "alfredo/dropbox"
+import (
+	"alfredo/dropbox"
+	"alfredo/firebase"
+)
 
 func handleAttachments(event *Event) {
 	message := event.Message
 	senderID := event.Sender.ID
+	user := firebase.GetUser(senderID)
 
 	for _, attachment := range message.Attachments {
-		go dropbox.UploadAttachment(attachment.Payload["url"])
+		go dropbox.UploadAttachment(attachment.Payload["url"], user["dropboxToken"].(string))
 	}
 
 	sendText("Your files are on their way to your Dropbox account!", senderID)
@@ -26,8 +30,8 @@ func sendDropoxAuthLink(recipientID string) {
 						map[string]string{
 							"type": "web_url",
 							"url": "https://www.dropbox.com/oauth2/authorize" +
-								"?client_id=b2ooejf291z2tex&response_type=token" +
-								"&redirect_uri=https://dropbot.localtunnel.me/dropbox" +
+								"?client_id=b2ooejf291z2tex&response_type=code" +
+								"&redirect_uri=https://dropbot.localtunnel.me/mdropbox" +
 								"&state=" + recipientID,
 							"title": "Link my Dropbox",
 						},

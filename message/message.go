@@ -2,11 +2,15 @@ package message
 
 import (
 	"alfredo/config"
+	"alfredo/dropbox"
+	"alfredo/firebase"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/labstack/echo"
 )
 
 // HandleMessage decides what to do with a new event depending on the message type.
@@ -82,10 +86,27 @@ func SetGreetingText() {
 		"greeting": []map[string]string{
 			map[string]string{
 				"locale": "default",
-				"text":   "Hi {{user_full_name}}! Do you often receive a lot of files on messenger? Forward them to me and I will put them right into your Dropbox!",
+				"text": "Hi {{user_full_name}}! Do you often receive a lot of files" +
+					" on messenger? Forward them to me and I will put them right into your Dropbox!",
 			},
 		},
 	}
 
 	updateMessengerProfile(data)
+}
+
+// LinkDropbox links a Dropbox account to a user.
+func LinkDropbox(c echo.Context) error {
+	code := c.QueryParam("code")
+	userID := c.QueryParam("state")
+
+	token := dropbox.GetAuthToken(code)
+
+	firebase.SaveUser(userID, token)
+	sendText("Super! I keep getting told I look like a cat but, I'm not really"+
+		" good at anything cats can do :( I'm only good at saving files to Dropbox!"+
+		" Forward all the important files you have on messenger to me and I'll"+
+		" instantly put them into your Dropbox!", userID)
+	return c.String(200, "You're Dropbox account was successfully linked! You"+
+		" can close this tab and go back to messenger.")
 }

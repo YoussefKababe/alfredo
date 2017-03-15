@@ -19,6 +19,7 @@ func main() {
 	go message.SetGreetingText()
 	e.GET("/webhook", verify)
 	e.POST("/webhook", receive)
+	e.GET("/mdropbox", message.LinkDropbox)
 	e.Logger.Fatal(e.Start(":8080"))
 }
 

@@ -6,12 +6,17 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	e := echo.New()
 	e.Use(middleware.Logger())
 	config.LoadEnvVars()
@@ -20,7 +25,7 @@ func main() {
 	e.GET("/webhook", verify)
 	e.POST("/webhook", receive)
 	e.GET("/mdropbox", messenger.LinkDropbox)
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":" + port))
 }
 
 func verify(c echo.Context) error {

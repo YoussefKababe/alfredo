@@ -8,12 +8,15 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func main() {
 	e := echo.New()
+	e.Use(middleware.Logger())
 	config.LoadEnvVars()
-	message.SetGetStartedButton()
+	go message.SetGetStartedButton()
+	go message.SetGreetingText()
 	e.GET("/webhook", verify)
 	e.POST("/webhook", receive)
 	e.Logger.Fatal(e.Start(":8080"))
@@ -38,6 +41,8 @@ func receive(c echo.Context) error {
 		for _, event := range entry.Events {
 			if event.Message != nil {
 				message.HandleMessage(event)
+			} else if event.Postback != nil {
+				message.HandlePostback(event)
 			} else {
 				fmt.Println("Webhook received unknown event:", event)
 			}

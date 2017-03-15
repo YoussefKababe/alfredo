@@ -15,10 +15,11 @@ type Entry struct {
 
 // Event represents an event from an Entry.
 type Event struct {
-	Message   *Message `json:"message"`
-	Sender    *Person  `json:"sender"`
-	Recipient *Person  `json:"recipient"`
-	Timestamp uint     `json:"timestamp"`
+	Message   *Message  `json:"message"`
+	Postback  *Postback `json:"postback"`
+	Sender    *Person   `json:"sender"`
+	Recipient *Person   `json:"recipient"`
+	Timestamp uint      `json:"timestamp"`
 }
 
 // Message represents a message from an Event.
@@ -31,6 +32,11 @@ type Message struct {
 type Attachment struct {
 	Type    string            `json:"type"`
 	Payload map[string]string `json:"payload"`
+}
+
+// Postback represents a postback from a Message.
+type Postback struct {
+	Payload string `json:"payload"`
 }
 
 // Person represents a sender or a recipient from an Event.

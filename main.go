@@ -68,7 +68,7 @@ func linkDropbox(c echo.Context) error {
 	fb.SaveUser(userID, token)
 	messenger.SendText("Awesome! Your Dropbox account is now linked. Send or forward"+
 		" any file to me and I'll instantly save it to your Dropbox!", userID)
-	return c.String(http.StatusOK, "You're Dropbox account was successfully linked! You"+
+	return c.String(http.StatusOK, "Your Dropbox account was successfully linked! You"+
 		" can close this tab and go back to messenger.")
 }
 

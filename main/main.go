@@ -23,6 +23,7 @@ func main() {
 	e.GET("/webhook", verify)
 	e.POST("/webhook", receive)
 	e.GET("/mdropbox", linkDropbox)
+	e.GET("/privacy", privacy)
 	e.Logger.Fatal(e.Start(":" + config.AppPort))
 }
 
@@ -67,6 +68,16 @@ func linkDropbox(c echo.Context) error {
 	fb.SaveUser(userID, token)
 	messenger.SendText("Awesome! Your Dropbox account is now linked. Send or forward"+
 		" any file to me and I'll instantly save it to your Dropbox!", userID)
-	return c.String(200, "You're Dropbox account was successfully linked! You"+
+	return c.String(http.StatusOK, "You're Dropbox account was successfully linked! You"+
 		" can close this tab and go back to messenger.")
+}
+
+func privacy(c echo.Context) error {
+	return c.String(http.StatusOK, "Alfredo bot Privacy Policy:\n\n\n"+
+		"Alfredo bot never collects any personal information about our users.\n\n"+
+		"The files you send to the bot for saving to your Dropbox account are\n"+
+		"safely stored on Facebook's servers, and may only be seen by us in rare\n"+
+		"cases when there is an issue with the bot. We take high responsibility\n"+
+		"in protecting the privacy of your files, and we will never exploit, or\n"+
+		"publish them publicly under any circumstances.")
 }

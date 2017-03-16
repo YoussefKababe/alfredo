@@ -45,9 +45,9 @@ func receive(c echo.Context) error {
 	for _, entry := range call.Entries {
 		for _, event := range entry.Events {
 			if event.Message != nil {
-				lib.HandleMessage(event)
+				go lib.HandleMessage(event)
 			} else if event.Postback != nil {
-				lib.HandlePostback(event)
+				go lib.HandlePostback(event)
 			} else {
 				fmt.Println("Webhook received unknown event:", event)
 			}

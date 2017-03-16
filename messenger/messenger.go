@@ -2,38 +2,12 @@ package messenger
 
 import (
 	"alfredo/config"
-	"alfredo/dropbox"
-	"alfredo/firebase"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/labstack/echo"
 )
-
-// HandleMessage decides what to do with a new event depending on the message type.
-func HandleMessage(event *Event) {
-	message := event.Message
-
-	switch {
-	case message.Text != "":
-		handleText(event)
-	case message.Attachments != nil:
-		handleAttachments(event)
-	}
-}
-
-// HandlePostback decides what to do with a new event depending on the postback payload.
-func HandlePostback(event *Event) {
-	payload := event.Postback.Payload
-
-	switch payload {
-	case "GET_STARTED_PAYLOAD":
-		handleGetStarted(event)
-	}
-}
 
 func sendMessage(event *map[string]interface{}) {
 	message, _ := json.Marshal(event)
@@ -44,7 +18,8 @@ func sendMessage(event *map[string]interface{}) {
 	client.Do(request)
 }
 
-func sendSenderAction(recipientID, action string) {
+// SendSenderAction sends user action to messenger
+func SendSenderAction(recipientID, action string) {
 	data := map[string]interface{}{
 		"recipient": map[string]string{
 			"id": recipientID,
@@ -93,20 +68,4 @@ func SetGreetingText() {
 	}
 
 	updateMessengerProfile(data)
-}
-
-// LinkDropbox links a Dropbox account to a user.
-func LinkDropbox(c echo.Context) error {
-	code := c.QueryParam("code")
-	userID := c.QueryParam("state")
-
-	token := dropbox.GetAuthToken(code)
-
-	firebase.SaveUser(userID, token)
-	sendText("Awesome! :D I keep getting told I look like a cat but, I'm not really"+
-		" good at anything cats can do. I'm only good at saving files to Dropbox!"+
-		" Forward all the important files you have on messenger to me and I'll"+
-		" instantly put them in your Dropbox!", userID)
-	return c.String(200, "You're Dropbox account was successfully linked! You"+
-		" can close this tab and go back to messenger.")
 }

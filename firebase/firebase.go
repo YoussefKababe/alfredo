@@ -1,15 +1,30 @@
 package firebase
 
 import (
-	"alfredo/config"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 )
 
+// Firebase represents a firebase instance.
+type Firebase struct {
+	ProjectID string
+	Secret    string
+}
+
+// New creates a new firebase instance
+func New(firebaseProject, firebaseSecret string) Firebase {
+	f := Firebase{
+		ProjectID: firebaseProject,
+		Secret:    firebaseSecret,
+	}
+
+	return f
+}
+
 //SaveUser saves a user to the Firebase database.
-func SaveUser(userID, dropboxToken string) {
+func (f *Firebase) SaveUser(userID, dropboxToken string) {
 	user := map[string]interface{}{
 		userID: map[string]string{
 			"dropboxToken": dropboxToken,
@@ -18,14 +33,14 @@ func SaveUser(userID, dropboxToken string) {
 
 	muser, _ := json.Marshal(user)
 
-	request, _ := http.NewRequest("PUT", "https://alfredo-b0f06.firebaseio.com/users.json?auth="+config.FirebaseToken, bytes.NewBuffer(muser))
+	request, _ := http.NewRequest("PUT", "https://"+f.ProjectID+".firebaseio.com/users.json?auth="+f.Secret, bytes.NewBuffer(muser))
 	client := http.Client{}
 	client.Do(request)
 }
 
 // GetUser get a user record from the Firebase database.
-func GetUser(userID string) map[string]interface{} {
-	request, _ := http.NewRequest("GET", "https://alfredo-b0f06.firebaseio.com/users/"+userID+".json?auth="+config.FirebaseToken, nil)
+func (f *Firebase) GetUser(userID string) map[string]interface{} {
+	request, _ := http.NewRequest("GET", "https://"+f.ProjectID+".firebaseio.com/users/"+userID+".json?auth="+f.Secret, nil)
 	client := http.Client{}
 	resp, _ := client.Do(request)
 	result, _ := ioutil.ReadAll(resp.Body)

@@ -1,31 +1,29 @@
 package main
 
 import (
+	"alfredo"
 	"alfredo/config"
+	"alfredo/dropbox"
+	"alfredo/firebase"
 	"alfredo/messenger"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
 	e := echo.New()
 	e.Use(middleware.Logger())
-	config.LoadEnvVars()
+	config.Initialize()
 	go messenger.SetGetStartedButton()
 	go messenger.SetGreetingText()
 	e.GET("/webhook", verify)
 	e.POST("/webhook", receive)
-	e.GET("/mdropbox", messenger.LinkDropbox)
-	e.Logger.Fatal(e.Start(":" + port))
+	e.GET("/mdropbox", linkDropbox)
+	e.Logger.Fatal(e.Start(":" + config.AppPort))
 }
 
 func verify(c echo.Context) error {
@@ -46,9 +44,9 @@ func receive(c echo.Context) error {
 	for _, entry := range call.Entries {
 		for _, event := range entry.Events {
 			if event.Message != nil {
-				messenger.HandleMessage(event)
+				alfredo.HandleMessage(event)
 			} else if event.Postback != nil {
-				messenger.HandlePostback(event)
+				alfredo.HandlePostback(event)
 			} else {
 				fmt.Println("Webhook received unknown event:", event)
 			}
@@ -56,4 +54,19 @@ func receive(c echo.Context) error {
 	}
 
 	return c.NoContent(http.StatusOK)
+}
+
+func linkDropbox(c echo.Context) error {
+	fb := firebase.New(config.FirebaseProjectID, config.FirebaseSecret)
+	db := dropbox.New(config.DropboxKey, config.DropboxSecret)
+	code := c.QueryParam("code")
+	userID := c.QueryParam("state")
+
+	token := db.GetAuthToken(code)
+
+	fb.SaveUser(userID, token)
+	messenger.SendText("Awesome! Your Dropbox account is now linked. Send or forward"+
+		" any file to me and I'll instantly save it to your Dropbox!", userID)
+	return c.String(200, "You're Dropbox account was successfully linked! You"+
+		" can close this tab and go back to messenger.")
 }

@@ -4,7 +4,6 @@ import (
 	"alfredo/config"
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -12,8 +11,24 @@ import (
 	"strings"
 )
 
+// Dropbox represents a dropbox instance.
+type Dropbox struct {
+	Key    string
+	Secret string
+}
+
+// New create a dropbox instance.
+func New(dropboxKey, dropboxSecret string) Dropbox {
+	d := Dropbox{
+		Key:    dropboxKey,
+		Secret: dropboxSecret,
+	}
+
+	return d
+}
+
 // UploadAttachment uploads an attachment to dropbox
-func UploadAttachment(url, token string) {
+func (dropbox *Dropbox) UploadAttachment(url, token string) {
 	attachment := map[string]interface{}{
 		"url":  url,
 		"path": "/" + path.Base(url)[0:strings.Index(path.Base(url), "?")],
@@ -25,19 +40,17 @@ func UploadAttachment(url, token string) {
 	request.Header.Set("Content-Type", "application/json")
 
 	client := http.Client{}
-	resp, _ := client.Do(request)
-
-	fmt.Println(resp)
+	client.Do(request)
 }
 
 // GetAuthToken converts a Dropbox API code into and auth token.
-func GetAuthToken(code string) string {
+func (dropbox *Dropbox) GetAuthToken(code string) string {
 	data := url.Values{}
 	data.Set("code", code)
 	data.Add("grant_type", "authorization_code")
-	data.Add("client_id", config.DropboxKey)
-	data.Add("client_secret", config.DropboxSecret)
-	data.Add("redirect_uri", "https://alfredo.qubate.tech/mdropbox")
+	data.Add("client_id", dropbox.Key)
+	data.Add("client_secret", dropbox.Secret)
+	data.Add("redirect_uri", config.DropboxRedirect)
 
 	request, _ := http.NewRequest("POST", "https://api.dropboxapi.com/oauth2/token", bytes.NewBufferString(data.Encode()))
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")

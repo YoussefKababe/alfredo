@@ -1,23 +1,9 @@
 package messenger
 
-import (
-	"alfredo/dropbox"
-	"alfredo/firebase"
-)
+import "alfredo/config"
 
-func handleAttachments(event *Event) {
-	message := event.Message
-	senderID := event.Sender.ID
-	user := firebase.GetUser(senderID)
-
-	for _, attachment := range message.Attachments {
-		go dropbox.UploadAttachment(attachment.Payload["url"], user["dropboxToken"].(string))
-	}
-
-	sendText("Your file is on the way to your Dropbox account!", senderID)
-}
-
-func sendDropoxAuthLink(recipientID string) {
+// SendDropoxAuthLink sends a button to link Dropbox.
+func SendDropoxAuthLink(recipientID string) {
 	newMessage := map[string]interface{}{
 		"message": map[string]interface{}{
 			"attachment": map[string]interface{}{
@@ -31,7 +17,7 @@ func sendDropoxAuthLink(recipientID string) {
 							"type": "web_url",
 							"url": "https://www.dropbox.com/oauth2/authorize" +
 								"?client_id=b2ooejf291z2tex&response_type=code" +
-								"&redirect_uri=https://alfredo.qubate.tech/mdropbox" +
+								"&redirect_uri=" + config.DropboxRedirect +
 								"&state=" + recipientID,
 							"title": "Link my Dropbox",
 						},

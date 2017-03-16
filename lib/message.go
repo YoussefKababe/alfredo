@@ -1,4 +1,4 @@
-package alfredo
+package lib
 
 import (
 	"alfredo/config"

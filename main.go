@@ -1,10 +1,10 @@
 package main
 
 import (
-	"alfredo"
 	"alfredo/config"
 	"alfredo/dropbox"
 	"alfredo/firebase"
+	"alfredo/lib"
 	"alfredo/messenger"
 	"fmt"
 	"log"
@@ -45,9 +45,9 @@ func receive(c echo.Context) error {
 	for _, entry := range call.Entries {
 		for _, event := range entry.Events {
 			if event.Message != nil {
-				alfredo.HandleMessage(event)
+				lib.HandleMessage(event)
 			} else if event.Postback != nil {
-				alfredo.HandlePostback(event)
+				lib.HandlePostback(event)
 			} else {
 				fmt.Println("Webhook received unknown event:", event)
 			}

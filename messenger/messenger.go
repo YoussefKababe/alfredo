@@ -61,7 +61,7 @@ func SetGreetingText() {
 		"greeting": []map[string]string{
 			map[string]string{
 				"locale": "default",
-				"text": "Hi {{user_full_name}}! Do you often receive a lot of files" +
+				"text": "Hi {{user_first_name}}! Do you often receive a lot of files" +
 					" on messenger? Forward them to me and I will save them instantly to your Dropbox!",
 			},
 		},

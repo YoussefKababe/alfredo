@@ -19,7 +19,7 @@ func SendDropoxAuthLink(recipientID string) {
 								"?client_id=b2ooejf291z2tex&response_type=code" +
 								"&redirect_uri=" + config.DropboxRedirect +
 								"&state=" + recipientID,
-							"title": "Click to link your Dropbox!",
+							"title": "Link my Dropbox",
 						},
 					},
 				},

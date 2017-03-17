@@ -33,7 +33,7 @@ func (f *Firebase) SaveUser(userID, dropboxToken string) {
 
 	muser, _ := json.Marshal(user)
 
-	request, _ := http.NewRequest("PUT", "https://"+f.ProjectID+".firebaseio.com/users.json?auth="+f.Secret, bytes.NewBuffer(muser))
+	request, _ := http.NewRequest("PUT", "https://"+f.ProjectID+".firebaseio.com/users/"+userID+".json?auth="+f.Secret, bytes.NewBuffer(muser))
 	client := http.Client{}
 	client.Do(request)
 }

@@ -32,7 +32,7 @@ func handleAttachments(event *messenger.Event) {
 	senderID := event.Sender.ID
 	user := fb.GetUser(senderID)
 
-	if user["dropboxToken"] == "" {
+	if (user["dropboxToken"] == "") || (user["dropboxToken"] == nil) {
 		handleGetStarted(event)
 		return
 	}

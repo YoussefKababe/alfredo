@@ -26,9 +26,7 @@ func New(firebaseProject, firebaseSecret string) Firebase {
 //SaveUser saves a user to the Firebase database.
 func (f *Firebase) SaveUser(userID, dropboxToken string) {
 	user := map[string]interface{}{
-		userID: map[string]string{
-			"dropboxToken": dropboxToken,
-		},
+		"dropboxToken": dropboxToken,
 	}
 
 	muser, _ := json.Marshal(user)
